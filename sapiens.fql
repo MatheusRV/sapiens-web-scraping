@@ -1,0 +1,19 @@
+LET sapiens = DOCUMENT("https://sapiens.dti.ufv.br/sapiens_crp/CheckLogin.asp", {
+    driver: "cdp",
+    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36"
+})
+
+INPUT(sapiens, 'input[name="Usuario"]', "er06022")
+INPUT(sapiens, 'input[name="Senha"]', "456753")
+CLICK(sapiens, 'input[name="Login"]')
+
+NAVIGATE(sapiens, "https://sapiens.dti.ufv.br/sapiens_crp/aluno/avaliacoes.asp")
+
+WAIT_ELEMENT(sapiens, "center", 5000)
+
+LET infoquery = 'center > table:nth-child(2) > tbody > td > table > tbody > tr'
+
+FOR row IN ELEMENTS(sapiens, infoquery)
+    LET aluno = INNER_TEXT(row, "td > font")
+
+RETURN { aluno }
